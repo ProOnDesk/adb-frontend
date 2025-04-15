@@ -23,7 +23,6 @@ type ModalProps = {
 type OpenProps = {
   children: React.ReactNode;
   opens: string;
-  additionalFn?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 type WindowProps = {
@@ -49,19 +48,16 @@ export default function Modal({ children }: ModalProps) {
   );
 }
 
-function Open({ children, opens, additionalFn }: OpenProps) {
+function Open({ children, opens }: OpenProps) {
   const { open } = useContext(ModalContext)!;
   return cloneElement(children as React.ReactElement, {
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
       open(opens);
-      if (additionalFn) {
-        additionalFn(e);
-      }
     },
   });
 }
 
-function Window({ children, name, version }: WindowProps) {
+function Window({ children, name }: WindowProps) {
   const { openName, close } = useContext(ModalContext)!;
 
   if (name !== openName) return null;
@@ -71,12 +67,7 @@ function Window({ children, name, version }: WindowProps) {
       <div className="h-full w-full bg-black opacity-20" onClick={close}></div>
       <motion.div
         className={clsx(
-          "fixed top-1/2 left-1/2 bg-white -translate-y-1/2 -translate-x-1/2 z-[51] rounded-lg p-6 w-[90vw]  max-h-[90vh] overflow-y-auto",
-          version === "second"
-            ? "max-w-[550px]"
-            : version === "forQuiz"
-            ? "max-w-5xl"
-            : "max-w-[650px]"
+          "fixed top-1/2 left-1/2 bg-white -translate-y-1/2 -translate-x-1/2 z-[51] rounded-lg p-6 w-[90vw]  max-h-[90vh] overflow-y-auto max-w-[650px]"
         )}
         animate={{ translateY: "-50%", translateX: "-50%", opacity: 1 }}
         initial={{ translateY: "-40%", translateX: "-50%", opacity: 0 }}

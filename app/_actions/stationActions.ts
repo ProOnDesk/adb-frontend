@@ -36,11 +36,11 @@ export async function getStationsWithFilters(
 		params.page = 1;
 	}
 	if (!params.size) {
-		params.size = 30;
+		params.size = 50;
 	}
 
 	if (params.voivodeship) {
-		link += `&voivodeship=${params.voivodeship}&`;
+		link += `&voivodeship=${params.voivodeship}`;
 	}
 	if (params.include_inactive) {
 		link += `&include_inactive=true`;
@@ -55,13 +55,14 @@ export async function getStationsWithFilters(
 	if (params.size) {
 		link += `&size=${params.size}`;
 	}
-
+	console.log(link);
 	try {
 		const response = await fetch(link, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			cache: 'no-store',
 		});
 
 		if (!response.ok) {

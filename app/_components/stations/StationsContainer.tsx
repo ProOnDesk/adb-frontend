@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { StationsSearchParams } from '@/app/stations/page';
 import { getStationsWithFilters, Station } from '@/app/_actions/stationActions';
 import StationsList from './StationsList';
-import StationsPagination from './StationsPagination';
+import Pagination from '../Pagination';
 import Spinner from '../Spinner';
 
 export default function StationsContainer({
@@ -23,7 +23,6 @@ export default function StationsContainer({
 			setLoading(true);
 
 			const data = await getStationsWithFilters(searchParams);
-			console.log(data);
 			setStations(data.items);
 			setPage(data.page);
 			setPages(data.pages);
@@ -42,11 +41,7 @@ export default function StationsContainer({
 			) : (
 				<>
 					<StationsList stations={stations} />
-					<StationsPagination
-						page={page}
-						pages={pages}
-						searchParams={searchParams}
-					/>
+					<Pagination page={page} pages={pages} searchParams={searchParams} />
 				</>
 			)}
 		</>

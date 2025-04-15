@@ -3,18 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { StationsSearchParams } from '@/app/stations/page';
+import { SensorsSearchParams } from '@/app/stations/[stationCode]/page';
 
-interface StationsPaginationProps {
-	searchParams: StationsSearchParams;
+interface PaginattionProps {
+	searchParams: StationsSearchParams | SensorsSearchParams;
 	page: number;
 	pages: number;
 }
 
-export default function StationsPagination({
+export default function Pagination({
 	searchParams,
 	page,
 	pages,
-}: StationsPaginationProps) {
+}: PaginattionProps) {
 	const router = useRouter();
 	const [inputPage, setInputPage] = useState(page);
 

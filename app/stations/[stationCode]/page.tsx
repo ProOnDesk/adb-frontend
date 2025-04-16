@@ -29,18 +29,6 @@ export default async function page({ params, searchParams }: PageProps) {
 		pages,
 	} = await getSensorsWithFilters(stationCode, searchParams);
 
-	if (!sensors || sensors.length === 0) {
-		return (
-			<div className='p-6 text-center space-y-6'>
-				<p className='text-2xl font-semibold text-gray-700'>
-					Brak sensorów dla stacji z kodem{' '}
-					<span className='text-blue-600'>{stationCode}</span>.
-				</p>
-				<ReturnToStationButton />
-			</div>
-		);
-	}
-
 	return (
 		<main className='p-6'>
 			<Link

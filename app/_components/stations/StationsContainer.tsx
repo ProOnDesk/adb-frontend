@@ -1,49 +1,29 @@
-// StationsContainer.tsx (client)
-'use client';
-
-import { useEffect, useState } from 'react';
 import { StationsSearchParams } from '@/app/stations/page';
-import { getStationsWithFilters, Station } from '@/app/_actions/stationActions';
+import { getStationsWithFilters } from '@/app/_actions/stationActions';
 import StationsList from './StationsList';
 import Pagination from '../Pagination';
-import Spinner from '../Spinner';
 
-export default function StationsContainer({
+export default async function StationsContainer({
 	searchParams,
 }: {
 	searchParams: StationsSearchParams;
 }) {
-	const [stations, setStations] = useState<Station[]>([]);
-	const [page, setPage] = useState(1);
-	const [pages, setPages] = useState(1);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			setLoading(true);
-
-			const data = await getStationsWithFilters(searchParams);
-			setStations(data.items);
-			setPage(data.page);
-			setPages(data.pages);
-			setLoading(false);
-		};
-
-		fetchData();
-	}, [searchParams]);
+	const data = await getStationsWithFilters(searchParams);
 
 	return (
-		<>
-			{loading ? (
-				<div className='w-full flex flex-col justify-center py-10'>
-					<Spinner text='Ładowanie stacji' />
-				</div>
-			) : (
+		<div>
+			{data.items.length > 0 ? (
 				<>
-					<StationsList stations={stations} />
-					<Pagination page={page} pages={pages} searchParams={searchParams} />
+					<StationsList stations={data.items} />
+					<Pagination
+						page={data.page}
+						pages={data.pages}
+						searchParams={searchParams}
+					/>
 				</>
+			) : (
+				<p className='text-xl text-center py-10'>Nie znaleziono stacji</p>
 			)}
-		</>
+		</div>
 	);
 }

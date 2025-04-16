@@ -1,5 +1,7 @@
 import StationsFilters from '../_components/stations/StationsFilters';
 import StationsContainer from '../_components/stations/StationsContainer';
+import { Suspense } from 'react';
+import Spinner from '../_components/Spinner';
 
 export const VOIVODESHIPS = [
 	'PODKARPACKIE',
@@ -35,7 +37,16 @@ export default async function page({ searchParams }: PageProps) {
 		<main className='p-6'>
 			<h1 className='text-2xl font-bold mb-4'>Lista stacji</h1>
 			<StationsFilters searchParams={searchParams} />
-			<StationsContainer searchParams={searchParams}/>
+			<Suspense
+				fallback={
+					<div className='w-full flex flex-col justify-center py-10'>
+						<Spinner text='Ładowanie stacji...' />
+					</div>
+				}
+				key={searchParams.page}
+			>
+				<StationsContainer searchParams={searchParams} />
+			</Suspense>
 		</main>
 	);
 }

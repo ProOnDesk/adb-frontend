@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Setup from './_utils/Setup';
 
 export const metadata: Metadata = {
 	title: 'ADB - Project',
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={``}>{children}</body>
+			<body className={``}>
+				<Setup>{children}</Setup>
+			</body>
 		</html>
 	);
 }

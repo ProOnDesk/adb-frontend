@@ -11,9 +11,9 @@ export default function ReturnToStationButton() {
 	return (
 		<button
 			onClick={handleGoBack}
-			className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
+			className='text-blue-500 hover:underline mb-4 inline-block'
 		>
-			Wróć do listu stacji
+			← Powrót do listy stacji
 		</button>
 	);
 }

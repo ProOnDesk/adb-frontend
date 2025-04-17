@@ -2,7 +2,6 @@
 
 import { notFound } from 'next/navigation';
 import { StationsSearchParams } from '../stations/page';
-import { SensorsSearchParams } from '../stations/[stationCode]/page';
 
 export interface Station {
 	id: number;
@@ -20,20 +19,7 @@ export interface Station {
 	count_working_sensors: number;
 }
 
-export interface Sensor {
-	id: number;
-	code: string;
-	station_code: string;
-	indicator_code: string;
-	indicator_name: string;
-	averaging_time: string;
-	measurement_type: string;
-	start_date: string;
-	end_date: string | null;
-	is_active: boolean;
-}
-
-interface PaginatedResponse<Response> {
+export interface PaginatedResponse<Response> {
 	items: Response;
 	total: number;
 	page: number;
@@ -87,57 +73,6 @@ export async function getStationsWithFilters(
 		return data;
 	} catch (error) {
 		console.log('getStationsWithFilters error:', error);
-		notFound();
-	}
-}
-
-export async function getSensorsWithFilters(
-	station_code: string,
-	params: SensorsSearchParams
-): Promise<PaginatedResponse<Sensor[]>> {
-	let link = `${process.env.NEXT_PUBLIC_HOST}/sensors?`;
-
-	if (station_code) {
-		link += `&station_code=${station_code}`;
-	}
-	if (!params.page) {
-		params.page = 1;
-	}
-	if (!params.size) {
-		params.size = 50;
-	}
-	if (params.include_inactive) {
-		link += `&include_inactive=true`;
-	}
-	if (params.measurement_type) {
-		link += `&measurement_type=${params.measurement_type}`;
-	}
-
-	if (params.page) {
-		link += `&page=${params.page}`;
-	}
-
-	if (params.size) {
-		link += `&size=${params.size}`;
-	}
-	console.log(link);
-	try {
-		const response = await fetch(link, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			cache: 'no-store',
-		});
-
-		if (!response.ok) {
-			throw new Error(`Błąd serwera: ${response.status}`);
-		}
-
-		const data = await response.json();
-		return data;
-	} catch (error) {
-		console.log('getSensorsWithFilters error:', error);
 		notFound();
 	}
 }

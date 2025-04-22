@@ -20,17 +20,18 @@ export default function SensorsContainer({
 	const [measurementType, setMeasurementType] = useState<
 		'automatyczny' | 'manualny'
 	>();
-	const { data, isFetching } = useSensors({
+	const { data, isFetching: isSensorsFetching } = useSensors({
 		station_code: stationCode,
 		size: size,
 		page: page,
 		include_inactive: includeInactive,
 		measurement_type: measurementType,
 	});
+
 	const sensors = data?.items;
 	const pages = data?.pages || 1;
 
-	if (isFetching) {
+	if (isSensorsFetching) {
 		return (
 			<div className='py-10'>
 				<Spinner text='Ładowanie listy sensorów...' />
@@ -39,9 +40,9 @@ export default function SensorsContainer({
 	}
 
 	return (
-		<div>
-			<p className='text-2xl font-bold mb-4'>
-				Sensory dla stacji <span className='text-blue-600'>{stationCode}</span>
+		<div className='px-2'>
+			<p className='text-2xl font-semibold mb-4'>
+				Lista sensorów: <span className='text-blue-600'>{sensors?.length}</span>
 			</p>
 			<SensorsFilters
 				includeInactive={includeInactive}
@@ -52,15 +53,18 @@ export default function SensorsContainer({
 				size={size}
 				setSize={setSize}
 			/>
-			<SensorsList sensors={sensors} />
+			{sensors && sensors?.length > 0 && <SensorsList sensors={sensors} />}
 			{sensors?.length === 0 && (
 				<div className='py-10'>
-					<p className='text-center text-gray-500'>
-						Brak sensorów do wyświetlenia.
+					<p className='text-center text-gray-500 flex items-center justify-center gap-2'>
+						<span>Brak sensorów do wyświetlenia</span>
+						<span>😔</span>
 					</p>
 				</div>
 			)}
-			<ClientPagination page={page} pages={pages} setPage={setPage} />
+			{sensors && sensors?.length > 0 && (
+				<ClientPagination page={page} pages={pages} setPage={setPage} />
+			)}
 		</div>
 	);
 }

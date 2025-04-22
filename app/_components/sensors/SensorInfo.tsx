@@ -2,34 +2,46 @@ import { Sensor } from '@/app/_hooks/useSensors';
 
 export default function SensorInfo({ sensor }: { sensor: Sensor }) {
 	return (
-		<ul className="list-disc mx-auto w-fit py-5 space-y-2 text-gray-700">
-			<li>
-				<span className="font-semibold">Kod sensora:</span> {sensor.code}
+		<ul className="divide-y overflow-hidden text-gray-800">
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Kod sensora</span>
+				<span className="font-medium">{sensor.code}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Kod stacji:</span> {sensor.station_code}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Kod stacji</span>
+				<span className="font-medium">{sensor.station_code}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Kod wskaźnika:</span> {sensor.indicator_code}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Kod wskaźnika</span>
+				<span className="font-medium">{sensor.indicator_code}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Nazwa wskaźnika:</span> {sensor.indicator_name}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Nazwa wskaźnika</span>
+				<span className="font-medium">{sensor.indicator_name}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Czas uśredniania:</span> {sensor.averaging_time}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Czas uśredniania</span>
+				<span className="font-medium">{sensor.averaging_time}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Typ pomiaru:</span> {sensor.measurement_type}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Typ pomiaru</span>
+				<span className="font-medium">{sensor.measurement_type}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Data rozpoczęcia:</span> {sensor.start_date}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Data rozpoczęcia</span>
+				<span className="font-medium">{sensor.start_date}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Data zakończenia:</span>{' '}
-				{sensor.end_date || 'Brak'}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Data zakończenia</span>
+				<span className="font-medium">{sensor.end_date || 'Brak'}</span>
 			</li>
-			<li>
-				<span className="font-semibold">Aktywny:</span> {sensor.is_active ? 'Tak' : 'Nie'}
+			<li className="flex justify-between items-center p-4">
+				<span className="text-gray-600">Aktywny</span>
+				<span
+					className={sensor.is_active ? 'text-green-600 font-semibold' : 'text-red-500 font-medium'}
+				>
+					{sensor.is_active ? '✅' : '❌'}
+				</span>
 			</li>
 		</ul>
 	);

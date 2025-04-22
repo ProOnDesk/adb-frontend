@@ -10,6 +10,7 @@ export interface Station {
 	start_date: string;
 	end_date: string | null;
 	station_type: string;
+	area_type: string;
 	station_kind: string;
 	voivodeship: string;
 	city: string;

@@ -15,6 +15,9 @@ export default function SensorsList({ sensors }: SensorsListProps) {
 					<th className='px-4 py-2 border'>Typ pomiaru</th>
 					<th className='px-4 py-2 border'>Czas uśredniania</th>
 					<th className='px-4 py-2 border'>Aktywny</th>
+					{/* <th className='px-4 py-2 border'>Data rozpoczęcia</th> */}
+					{/* <th className='px-4 py-2 border'>Data zakończenia</th> */}
+					<th className='px-4 py-2 border'>Ostatni pomiar</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,6 +31,13 @@ export default function SensorsList({ sensors }: SensorsListProps) {
 						<td className='px-4 py-2 border text-center'>
 							{sensor.is_active ? '✅' : '❌'}
 						</td>
+						{/* <td className='px-4 py-2 border'>{sensor.start_date}</td> */}
+						{/* <td className='px-4 py-2 border'>{sensor.end_date || 'N/A'}</td> */}
+						<td className='px-4 py-2 border'>
+                            {sensor.latest_measurement
+                                ? `${sensor.latest_measurement.value} (${sensor.latest_measurement.timestamp})`
+                                : 'Brak danych'}
+                        </td>
 					</tr>
 				))}
 			</tbody>

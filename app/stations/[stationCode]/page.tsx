@@ -1,5 +1,6 @@
 import ReturnToStationButton from '@/app/_components/sensors/ReturnToStationButton';
 import SensorsContainer from '@/app/_components/sensors/SensorsContainer';
+import StationDetails from '@/app/_components/stations/StationDetails';
 
 interface PageProps {
 	params: {
@@ -13,9 +14,8 @@ export default async function page({ params }: PageProps) {
 	return (
 		<main className='p-6'>
 			<ReturnToStationButton />
-			<h1 className='text-2xl font-bold mb-4'>
-				Sensory dla stacji <span className='text-blue-600'>{stationCode}</span>
-			</h1>
+			<StationDetails stationCode={stationCode} />
+			<span className='block w-full h-[2px] bg-black/10 my-10 rounded-full'></span>
 			<SensorsContainer stationCode={stationCode} />
 		</main>
 	);

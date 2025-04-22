@@ -33,13 +33,16 @@ export default function SensorsContainer({
 	if (isFetching) {
 		return (
 			<div className='py-10'>
-				<Spinner text='Ładowanie sensorów...' />;
+				<Spinner text='Ładowanie listy sensorów...' />
 			</div>
 		);
 	}
 
 	return (
 		<div>
+			<p className='text-2xl font-bold mb-4'>
+				Sensory dla stacji <span className='text-blue-600'>{stationCode}</span>
+			</p>
 			<SensorsFilters
 				includeInactive={includeInactive}
 				setIncludeInactive={setIncludeInactive}

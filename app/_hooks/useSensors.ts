@@ -11,6 +11,12 @@ export interface Sensor {
 	start_date: string;
 	end_date: string | null;
 	is_active: boolean;
+	latest_measurement?: {
+		sensor_id: number;
+		value: number;
+		timestamp?: string;
+		id: number;
+	} | null;
 }
 
 export interface PaginatedResponse<Response> {

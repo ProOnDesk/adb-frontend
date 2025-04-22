@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import { notFound } from 'next/navigation';
-import { StationsSearchParams } from '../stations/page';
+import { notFound } from "next/navigation";
+import { StationsSearchParams } from "../stations/page";
 
 export interface Station {
 	id: number;
@@ -50,12 +50,13 @@ export async function getStationsWithFilters(
 		link += `&only_with_active_sensors=true`;
 	}
 
-	if (params.page) {
-		link += `&page=${params.page}`;
-	}
-	if (params.size) {
-		link += `&size=${params.size}`;
-	}
+
+  if (params.page) {
+    link += `&page=${params.page}`;
+  }
+  if (params.size) {
+    link += `&size=${params.size}`;
+  }
 
 	try {
 		const response = await fetch(link, {
@@ -66,14 +67,15 @@ export async function getStationsWithFilters(
 			cache: 'no-store',
 		});
 
-		if (!response.ok) {
-			throw new Error(`Błąd serwera: ${response.status}`);
-		}
 
-		const data = await response.json();
-		return data;
-	} catch (error) {
-		console.log('getStationsWithFilters error:', error);
-		notFound();
-	}
+    if (!response.ok) {
+      throw new Error(`Błąd serwera: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("getStationsWithFilters error:", error);
+    notFound();
+  }
 }

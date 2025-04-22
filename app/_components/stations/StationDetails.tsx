@@ -1,5 +1,5 @@
 'use client';
-
+import DynamicStationMap from '@/app/_components/stations/DynamicStationMap';
 import { useStation } from '@/app/_hooks/useStation';
 import Spinner from '../Spinner';
 
@@ -29,57 +29,66 @@ export default function StationDetails({ stationCode }: StationDetailsProps) {
 	}
 
 	return (
-		<div className='p-2'>
-			<p className='text-2xl font-bold mb-6 text-gray-800'>
-				Informacje o stacji <span className='text-blue-600'>{data.name}</span>
-			</p>
-			<ul className='list-disc pl-5 space-y-2 text-gray-700'>
-				<li>
-					<span className='font-semibold'>Kod stacji:</span> {data.code}
-				</li>
-				<li>
-					<span className='font-semibold'>Nazwa:</span> {data.name}
-				</li>
-				<li>
-					<span className='font-semibold'>Data rozpoczęcia:</span>{' '}
-					{data.start_date}
-				</li>
-				<li>
-					<span className='font-semibold'>Data zakończenia:</span>{' '}
-					{data.end_date || 'Brak'}
-				</li>
-				<li>
-					<span className='font-semibold'>Typ stacji:</span> {data.station_type}
-				</li>
-				<li>
-					<span className='font-semibold'>Typ obszaru:</span> {data.area_type}
-				</li>
-				<li>
-					<span className='font-semibold'>Rodzaj stacji:</span>{' '}
-					{data.station_kind}
-				</li>
-				<li>
-					<span className='font-semibold'>Województwo:</span> {data.voivodeship}
-				</li>
-				<li>
-					<span className='font-semibold'>Miasto:</span> {data.city}
-				</li>
-				<li>
-					<span className='font-semibold'>Adres:</span> {data.address}
-				</li>
-				<li>
-					<span className='font-semibold'>Szerokość geograficzna:</span>{' '}
-					{data.latitude}
-				</li>
-				<li>
-					<span className='font-semibold'>Długość geograficzna:</span>{' '}
-					{data.longitude}
-				</li>
-				<li>
-					<span className='font-semibold'>Liczba działających czujników:</span>{' '}
-					{data.count_working_sensors}
-				</li>
-			</ul>
+		<div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
+			<div className='p-2'>
+				<p className='text-2xl font-bold mb-6 text-gray-800'>
+					Informacje o stacji <span className='text-blue-600'>{data.name}</span>
+				</p>
+				<ul className='list-disc pl-5 space-y-2 text-gray-700'>
+					<li>
+						<span className='font-semibold'>Kod stacji:</span> {data.code}
+					</li>
+					<li>
+						<span className='font-semibold'>Nazwa:</span> {data.name}
+					</li>
+					<li>
+						<span className='font-semibold'>Data rozpoczęcia:</span>{' '}
+						{data.start_date}
+					</li>
+					<li>
+						<span className='font-semibold'>Data zakończenia:</span>{' '}
+						{data.end_date || 'Brak'}
+					</li>
+					<li>
+						<span className='font-semibold'>Typ stacji:</span>{' '}
+						{data.station_type}
+					</li>
+					<li>
+						<span className='font-semibold'>Typ obszaru:</span> {data.area_type}
+					</li>
+					<li>
+						<span className='font-semibold'>Rodzaj stacji:</span>{' '}
+						{data.station_kind}
+					</li>
+					<li>
+						<span className='font-semibold'>Województwo:</span>{' '}
+						{data.voivodeship}
+					</li>
+					<li>
+						<span className='font-semibold'>Miasto:</span> {data.city}
+					</li>
+					<li>
+						<span className='font-semibold'>Adres:</span> {data.address}
+					</li>
+					<li>
+						<span className='font-semibold'>Szerokość geograficzna:</span>{' '}
+						{data.latitude}
+					</li>
+					<li>
+						<span className='font-semibold'>Długość geograficzna:</span>{' '}
+						{data.longitude}
+					</li>
+					<li>
+						<span className='font-semibold'>
+							Liczba działających czujników:
+						</span>{' '}
+						{data.count_working_sensors}
+					</li>
+				</ul>
+			</div>
+			<div className='min-h-[400px]'>
+				<DynamicStationMap station={data} />
+			</div>
 		</div>
 	);
 }

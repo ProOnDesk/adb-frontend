@@ -3,8 +3,9 @@
 import SensorsFilters from './SensorsFilters';
 import ClientPagination from '../ClientPagination';
 import { useState } from 'react';
-import { Sensor, useSensors } from '@/app/_hooks/useSensors';
+import { useSensors } from '@/app/_hooks/useSensors';
 import Spinner from '../Spinner';
+import SensorsList from './SensorsList';
 
 interface SensorsContainerProps {
 	stationCode: string;
@@ -13,16 +14,23 @@ interface SensorsContainerProps {
 export default function SensorsContainer({
 	stationCode,
 }: SensorsContainerProps) {
-	const { data, isLoading } = useSensors({
+	const [page, setPage] = useState(1);
+	const [size, setSize] = useState(20);
+	const [includeInactive, setIncludeInactive] = useState<boolean>(false);
+	const [measurementType, setMeasurementType] = useState<
+		'automatyczny' | 'manualny'
+	>();
+	const { data, isFetching } = useSensors({
 		station_code: stationCode,
-		size: 4,
+		size: size,
+		page: page,
+		include_inactive: includeInactive,
+		measurement_type: measurementType,
 	});
 	const sensors = data?.items;
-	const currPage = data?.page || 1;
 	const pages = data?.pages || 1;
-	const [page, setPage] = useState(currPage);
 
-	if (isLoading) {
+	if (isFetching) {
 		return (
 			<div className='py-10'>
 				<Spinner text='Ładowanie sensorów...' />;
@@ -32,33 +40,23 @@ export default function SensorsContainer({
 
 	return (
 		<div>
-			{/* <SensorsFilters /> */}
-			<table className='min-w-full bg-white border border-gray-300 shadow'>
-				<thead className='bg-gray-100'>
-					<tr>
-						<th className='px-4 py-2 border'>Kod</th>
-						<th className='px-4 py-2 border'>Nazwa wskaźnika</th>
-						<th className='px-4 py-2 border'>Kod wskaźnika</th>
-						<th className='px-4 py-2 border'>Typ pomiaru</th>
-						<th className='px-4 py-2 border'>Czas uśredniania</th>
-						<th className='px-4 py-2 border'>Aktywny</th>
-					</tr>
-				</thead>
-				<tbody>
-					{sensors?.map((sensor: Sensor) => (
-						<tr key={sensor.id}>
-							<td className='px-4 py-2 border'>{sensor.code}</td>
-							<td className='px-4 py-2 border'>{sensor.indicator_name}</td>
-							<td className='px-4 py-2 border'>{sensor.indicator_code}</td>
-							<td className='px-4 py-2 border'>{sensor.measurement_type}</td>
-							<td className='px-4 py-2 border'>{sensor.averaging_time}</td>
-							<td className='px-4 py-2 border text-center'>
-								{sensor.is_active ? '✅' : '❌'}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
+			<SensorsFilters
+				includeInactive={includeInactive}
+				setIncludeInactive={setIncludeInactive}
+				measurementType={measurementType}
+				setMeasurementType={setMeasurementType}
+				setPage={setPage}
+				size={size}
+				setSize={setSize}
+			/>
+			<SensorsList sensors={sensors} />
+			{sensors?.length === 0 && (
+				<div className='py-10'>
+					<p className='text-center text-gray-500'>
+						Brak sensorów do wyświetlenia.
+					</p>
+				</div>
+			)}
 			<ClientPagination page={page} pages={pages} setPage={setPage} />
 		</div>
 	);

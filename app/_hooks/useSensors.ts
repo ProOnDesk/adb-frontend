@@ -20,10 +20,13 @@ export interface PaginatedResponse<Response> {
 	pages: number;
 }
 
-export interface StationsSearchParams {
+export interface SensorsParams {
 	station_code: string;
 	include_inactive?: boolean;
 	measurement_type?: 'automatyczny' | 'manualny';
+}
+
+export interface SensorsParamsWithPagination extends SensorsParams {
 	page?: number;
 	size?: number;
 }
@@ -34,9 +37,13 @@ export function useSensors({
 	measurement_type,
 	page,
 	size,
-}: StationsSearchParams) {
+}: SensorsParamsWithPagination) {
 	return useQuery<PaginatedResponse<Sensor[]>>({
-		queryKey: ['sensors'],
+		queryKey: [
+			'sensors',
+			{ station_code, include_inactive, measurement_type, page, size },
+		],
+
 		queryFn: async () => {
 			let link = `${process.env.NEXT_PUBLIC_HOST}/sensors?station_code=${station_code}`;
 			if (include_inactive) {

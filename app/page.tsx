@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -31,4 +32,5 @@ export default function Home() {
       <AsidePanel params={params} setParams={setParams} />
     </div>
   );
+
 }

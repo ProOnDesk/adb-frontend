@@ -42,7 +42,7 @@ export default function SensorsContainer({
 	return (
 		<div className='px-2'>
 			<p className='text-2xl font-semibold mb-4'>
-				Lista sensorów: <span className='text-blue-600'>{sensors?.length}</span>
+				Lista sensorów: <span className='text-blue-600'>{data?.total}</span>
 			</p>
 			<SensorsFilters
 				includeInactive={includeInactive}

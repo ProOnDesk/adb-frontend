@@ -106,15 +106,15 @@ export default function Map({ params }: MapProps) {
                   >
                     <Popup>
                       <div className="flex flex-col items-start">
-                        <strong>{station.name}</strong>
+                        <strong>{}</strong>
                         {station.city}, {station.address}
-                        <Modal.Open opens="stationDetails">
+                        <Modal.Open opens={`stationDetails ${station.id}`}>
                           <button className="mt-2 text-blue-500 hover:underline">
                             Zobacz szczegóły
                           </button>
                         </Modal.Open>
-                        <Modal.Window name="stationDetails">
-                          <StationDetailsModal stationCode={station.code} />
+                        <Modal.Window name={`stationDetails ${station.id}`}>
+                          <StationDetailsModal stationCode={station.code} station={station} />
                         </Modal.Window>
                       </div>
                     </Popup>

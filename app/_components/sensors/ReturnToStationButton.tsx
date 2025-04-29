@@ -13,7 +13,7 @@ export default function ReturnToStationButton() {
 			onClick={handleGoBack}
 			className='text-blue-500 hover:underline mb-4 inline-block'
 		>
-			← Powrót do listy stacji
+			← Powrót
 		</button>
 	);
 }

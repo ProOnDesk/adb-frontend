@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useMeasurements } from '@/app/_hooks/useMeasurements';
 import Spinner from '../Spinner';
-import ClientPagination from '../ClientPagination';
 import {
 	CartesianGrid,
 	ResponsiveContainer,
@@ -9,54 +8,53 @@ import {
 	ScatterChart,
 	XAxis,
 	YAxis,
+	Tooltip,
 } from 'recharts';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 export default function MeasurementList({ sensorId }: { sensorId: number }) {
-	const [page, setPage] = useState(1);
+	const [selectedDate, setSelectedDate] = useState(
+		new Date().toISOString().split('T')[0]
+	);
+	const today = new Date().toISOString().split('T')[0];
 	const { data, isFetching } = useMeasurements({
 		sensor_id: sensorId,
-		page,
-		size: 12,
+		date_filter: selectedDate,
+		page: 1,
+		size: 50,
 	});
 	const measurements = data?.items || [];
-	const hoursMeasurements = (() => {
-		const sortedMeasurements = measurements.sort(
-			(a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-		);
+	const filledMeasurements = (() => {
+		const result = [];
+		const measurementsByHour = new Map();
 
-		const filledMeasurements = [];
-		let currentTime = new Date(sortedMeasurements[0]?.timestamp).setMinutes(0, 0, 0);
-		const endTime = new Date(sortedMeasurements[sortedMeasurements.length - 1]?.timestamp).setMinutes(0, 0, 0);
+		measurements.forEach(({ timestamp, value }) => {
+			const hour = new Date(timestamp).getHours();
+			measurementsByHour.set(hour, value);
+		});
 
-		let index = 0;
-		while (currentTime <= endTime) {
-			const currentDate = new Date(currentTime);
-			const formattedTime = currentDate.toLocaleTimeString('pl-PL', {
-				hour: '2-digit',
-				minute: '2-digit',
+		for (let hour = 0; hour < 24; hour++) {
+			result.push({
+				timestamp: `${hour.toString().padStart(2, '0')}:00`,
+				value: measurementsByHour.get(hour) ?? null,
 			});
-
-			if (
-				index < sortedMeasurements.length &&
-				new Date(sortedMeasurements[index].timestamp).getTime() === currentTime
-			) {
-				filledMeasurements.push({
-					...sortedMeasurements[index],
-					timestamp: formattedTime,
-				});
-				index++;
-			} else {
-				filledMeasurements.push({
-					timestamp: formattedTime,
-					value: null, // No value for this hour
-				});
-			}
-
-			currentTime += 60 * 60 * 1000; // Increment by 1 hour
 		}
 
-		return filledMeasurements;
+		return result;
 	})();
+
+	const changeDate = (direction: 'prev' | 'next') => {
+		const currentDate = new Date(selectedDate);
+		currentDate.setDate(
+			currentDate.getDate() + (direction === 'next' ? 1 : -1)
+		);
+
+		const newDate = currentDate.toISOString().split('T')[0];
+
+		if (newDate <= today) {
+			setSelectedDate(newDate);
+		}
+	};
 
 	if (isFetching) {
 		return (
@@ -65,7 +63,6 @@ export default function MeasurementList({ sensorId }: { sensorId: number }) {
 			</div>
 		);
 	}
-	console.log(measurements);
 	return (
 		<div className='measurement-list'>
 			{measurements.length === 0 ? (
@@ -77,43 +74,47 @@ export default function MeasurementList({ sensorId }: { sensorId: number }) {
 				</div>
 			) : (
 				<>
-					{/* <ul>
-						{measurements.map((measurement: Measurement) => (
-							<li key={measurement.id} className='measurement-item'>
-								<div className='flex justify-between items-center p-4 border-b'>
-									<span className='font-medium text-lg'>
-										{measurement.value}
-									</span>
-									<span className='text-gray-500'>
-										{new Date(measurement.timestamp).toLocaleString('pl-PL', {
-											day: '2-digit',
-											month: '2-digit',
-											year: 'numeric',
-											hour: '2-digit',
-											minute: '2-digit',
-										})}
-									</span>
-								</div>
-							</li>
-						))}
-					</ul> */}
 					<div className='flex justify-between items-center'>
-						<ResponsiveContainer width='100%' height={400}>
+						<ResponsiveContainer width='90%' height={400}>
 							<ScatterChart>
 								<CartesianGrid />
-								<XAxis dataKey='timestamp' />
-								<YAxis dataKey='value' />
+								<XAxis dataKey='timestamp' name='Czas' />
+								<YAxis dataKey='value' name='Wartość' />
+								<Tooltip cursor={{ strokeDasharray: '3 3' }} />
 								<Scatter
-									name='A school'
-									data={hoursMeasurements}
-									fill='#8884d8'
+									data={filledMeasurements}
+									fill='#3b82f6'
+									legendType='circle'
 								/>
 							</ScatterChart>
 						</ResponsiveContainer>
 					</div>
-					<ClientPagination page={page} setPage={setPage} pages={data?.pages} />
 				</>
 			)}
+			<div className='flex justify-center items-center mt-5 gap-2'>
+				<button
+					className='py-2 px-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white disabled:opacity-50'
+					onClick={() => changeDate('prev')}
+				>
+					<FaArrowLeft />
+				</button>
+				<input
+					type='date'
+					id='date-picker'
+					className='border rounded px-2 py-1'
+					value={selectedDate}
+					onChange={(e) => setSelectedDate(e.target.value)}
+					max={new Date().toISOString().split('T')[0]}
+				/>
+
+				<button
+					className={`py-2 px-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white disabled:opacity-50 disabled:hover:bg-blue-500 disabled:cursor-not-allowed`}
+					onClick={() => changeDate('next')}
+					disabled={selectedDate === today}
+				>
+					<FaArrowRight />
+				</button>
+			</div>
 		</div>
 	);
 }

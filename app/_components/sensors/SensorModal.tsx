@@ -16,7 +16,7 @@ export default function SensorModal({
 	const [activeTab, setActiveTab] = useState<'info' | 'measurements'>('info');
 
 	return (
-		<div className='flex flex-col bg-white'>
+		<div className='flex flex-col bg-white pb-10'>
 			<button
 				className='p-2 text-3xl hover:bg-gray-50 self-end'
 				onClick={onCloseModal}

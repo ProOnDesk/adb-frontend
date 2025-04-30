@@ -10,18 +10,23 @@ export interface Measurement {
 
 export function useMeasurements({
 	sensor_id,
+	date_filter,
 	page,
 	size,
 }: {
 	sensor_id: number;
+	date_filter?: string;
 	page?: number;
 	size?: number;
 }) {
 	return useQuery<PaginatedResponse<Measurement[]>>({
-		queryKey: ['measurements', sensor_id, page, size],
+		queryKey: ['measurements', sensor_id, page, size, date_filter],
 
 		queryFn: async () => {
 			let link = `${process.env.NEXT_PUBLIC_HOST}/measurements/${sensor_id}?`;
+			if (date_filter) {
+				link += `&date_filter=${date_filter}`;
+			}
 			if (page) {
 				link += `&page=${page}`;
 			}

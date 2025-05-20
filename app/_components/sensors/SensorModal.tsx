@@ -18,7 +18,7 @@ export default function SensorModal({
 	return (
 		<div className='flex flex-col bg-white pb-10'>
 			<button
-				className='p-2 text-3xl hover:bg-gray-50 self-end'
+				className='p-2 text-3xl hover:bg-gray-50 transition duration-300 self-end'
 				onClick={onCloseModal}
 			>
 				<IoClose />

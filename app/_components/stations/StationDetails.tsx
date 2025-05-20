@@ -2,6 +2,7 @@
 import DynamicStationMap from '@/app/_components/stations/DynamicStationMap';
 import { useStation } from '@/app/_hooks/useStation';
 import Spinner from '../Spinner';
+import StationReport from './StationReport';
 
 interface StationDetailsProps {
 	stationCode: string;
@@ -29,7 +30,7 @@ export default function StationDetails({ stationCode }: StationDetailsProps) {
 	}
 
 	return (
-		<div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
+		<div className='grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6'>
 			<div className='p-2'>
 				<p className='text-2xl font-bold mb-6 text-gray-800'>
 					Informacje o stacji <span className='text-blue-600'>{data.name}</span>
@@ -89,6 +90,7 @@ export default function StationDetails({ stationCode }: StationDetailsProps) {
 			<div className='min-h-[400px]'>
 				<DynamicStationMap station={data} />
 			</div>
+			<StationReport station={data} />
 		</div>
 	);
 }

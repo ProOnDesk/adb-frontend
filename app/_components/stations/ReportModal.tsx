@@ -3,6 +3,7 @@ import { Station } from '@/app/lib/getStationsWithFiltersClient';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Spinner from '../Spinner';
+import { useReport } from '@/app/_hooks/useReport';
 
 export default function ReportModal({
 	onCloseModal,
@@ -17,7 +18,7 @@ export default function ReportModal({
 		page: 1,
 		include_inactive: false,
 	});
-
+	const { mutate: generateReport, isPending } = useReport(onCloseModal);
 	const [dateRange, setDateRange] = useState({
 		start_time: new Date(),
 		end_time: new Date(),
@@ -35,9 +36,17 @@ export default function ReportModal({
 	};
 
 	const handleGenerateReport = () => {
-		console.log('Wybrane sensory:', choosedSensors);
-		console.log('Zakres dat:', dateRange);
-		console.log(choosedSensors);
+		if (choosedSensors.length === 0) {
+			alert('Wybierz przynajmniej jeden sensor!');
+			return;
+		}
+
+		generateReport({
+			station_id: station.id,
+			start_time: dateRange.start_time.toISOString(),
+			end_time: dateRange.end_time.toISOString(),
+			sensor_ids: choosedSensors.map(Number),
+		});
 	};
 
 	return (
@@ -123,8 +132,9 @@ export default function ReportModal({
 				type='button'
 				className='px-4 py-2 mx-2 self-center w-fit bg-blue-500 text-white rounded hover:bg-blue-600 transition'
 				onClick={handleGenerateReport}
+				disabled={isPending}
 			>
-				Generuj raport
+				{isPending ? 'Generowanie...' : 'Generuj raport'}
 			</button>
 		</div>
 	);

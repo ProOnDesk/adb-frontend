@@ -1,7 +1,6 @@
 import ReturnToStationButton from '@/app/_components/sensors/ReturnToStationButton';
 import SensorsContainer from '@/app/_components/sensors/SensorsContainer';
 import StationDetails from '@/app/_components/stations/StationDetails';
-import StationReport from '@/app/_components/stations/StationReport';
 
 interface PageProps {
 	params: {

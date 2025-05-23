@@ -3,7 +3,7 @@ import { Station } from '@/app/lib/getStationsWithFiltersClient';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Spinner from '../Spinner';
-import { useReport } from '@/app/_hooks/useReport';
+import { useCsvReport, usePdfReport } from '@/app/_hooks/useReport';
 
 export default function ReportModal({
 	onCloseModal,
@@ -18,12 +18,17 @@ export default function ReportModal({
 		page: 1,
 		include_inactive: false,
 	});
-	const { mutate: generateReport, isPending } = useReport(onCloseModal);
+	const { mutate: generatePdfReport, isPending: isPdfPending } =
+		usePdfReport(onCloseModal);
+	const { mutate: generateCsvReport, isPending: isCsvPending } =
+		useCsvReport(onCloseModal);
+	const isPending = isPdfPending || isCsvPending;
 	const [dateRange, setDateRange] = useState({
 		start_time: new Date(),
 		end_time: new Date(),
 	});
 	const [choosedSensors, setChoosedSensors] = useState<number[]>([]);
+	const [choosedFileType, setChoosedFileType] = useState<'pdf' | 'csv'>('pdf');
 
 	const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
@@ -40,13 +45,22 @@ export default function ReportModal({
 			alert('Wybierz przynajmniej jeden sensor!');
 			return;
 		}
-
-		generateReport({
-			station_id: station.id,
-			start_time: dateRange.start_time.toISOString(),
-			end_time: dateRange.end_time.toISOString(),
-			sensor_ids: choosedSensors.map(Number),
-		});
+		if (choosedFileType === 'pdf') {
+			generatePdfReport({
+				station_id: station.id,
+				start_time: dateRange.start_time.toISOString(),
+				end_time: dateRange.end_time.toISOString(),
+				sensor_ids: choosedSensors.map(Number),
+			});
+		}
+		if (choosedFileType === 'csv') {
+			generateCsvReport({
+				station_id: station.id,
+				start_time: dateRange.start_time.toISOString(),
+				end_time: dateRange.end_time.toISOString(),
+				sensor_ids: choosedSensors.map(Number),
+			});
+		}
 	};
 
 	return (
@@ -126,6 +140,34 @@ export default function ReportModal({
 						/>
 					</div>
 				</div>
+			</div>
+			<div className='px-2'>
+				<p className='font-semibold text-lg pb-2'>Wybierz typ pliku</p>
+				<fieldset>
+					<div className='flex flex-row items-center gap-2'>
+						<input
+							type='radio'
+							id='pdf'
+							name='fileType'
+							value='pdf'
+							checked={choosedFileType === 'pdf'}
+							onChange={() => setChoosedFileType('pdf')}
+						/>
+						<label htmlFor='pdf'>PDF</label>
+					</div>
+
+					<div className='flex flex-row items-center gap-2'>
+						<input
+							type='radio'
+							id='csv'
+							name='fileType'
+							value='csv'
+							checked={choosedFileType === 'csv'}
+							onChange={() => setChoosedFileType('csv')}
+						/>
+						<label htmlFor='csv'>CSV</label>
+					</div>
+				</fieldset>
 			</div>
 
 			<button

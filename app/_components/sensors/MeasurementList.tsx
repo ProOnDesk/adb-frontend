@@ -11,8 +11,15 @@ import {
 	Tooltip,
 } from 'recharts';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { Sensor } from '@/app/_hooks/useSensors';
 
-export default function MeasurementList({ sensorId }: { sensorId: number }) {
+export default function MeasurementList({
+	sensorId,
+	sensor,
+}: {
+	sensorId: number;
+	sensor: Sensor;
+}) {
 	const [selectedDate, setSelectedDate] = useState(
 		new Date().toISOString().split('T')[0]
 	);
@@ -91,6 +98,12 @@ export default function MeasurementList({ sensorId }: { sensorId: number }) {
 					</div>
 				</>
 			)}
+			<div>
+				<p className='text-center text-lg'>
+					Nazwa sensora:{' '}
+					<span className='font-medium'>{sensor.indicator_name}</span>
+				</p>
+			</div>
 			<div className='flex justify-center items-center mt-5 gap-2'>
 				<button
 					className='py-2 px-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white disabled:opacity-50'

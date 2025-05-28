@@ -49,7 +49,7 @@ export default function SensorModal({
 			<div>
 				{activeTab === 'info' && <SensorInfo sensor={sensor} />}
 				{activeTab === 'measurements' && (
-					<MeasurementList sensorId={sensor.id} />
+					<MeasurementList sensorId={sensor.id} sensor={sensor}/>
 				)}
 			</div>
 		</div>
